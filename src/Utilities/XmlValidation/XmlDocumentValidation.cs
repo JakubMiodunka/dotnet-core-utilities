@@ -176,11 +176,14 @@ public sealed class XmlDocumentValidation
         var deviationsNode = new XElement("Deviations",
             new XAttribute("Quantity", _deviations.Count));
 
+        int nextDeviationIndex = 1;
+
         foreach (XmlDeviation deviation in _deviations)
         {
             string severity = deviation.Severity.ToString().ToLower();
 
             var deviationNode = new XElement("Deviation",
+                new XAttribute("Index", nextDeviationIndex++),
                 new XAttribute("LineNumber", deviation.LineNumber),
                 new XAttribute("Severity", severity),
                 new XText(deviation.Description));
