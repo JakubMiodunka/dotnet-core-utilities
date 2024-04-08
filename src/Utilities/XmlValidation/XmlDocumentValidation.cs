@@ -150,7 +150,7 @@ public sealed class XmlDocumentValidation
     /// </exception>
     public void SaveReportAs(string reportPath)
     {
-        if (WasExecuted)
+        if (!WasExecuted)
         {
             var errorMessage = "Unable to prepare validation report: validation not performed yet";
             throw new InvalidOperationException(errorMessage);
