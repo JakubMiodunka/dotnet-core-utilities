@@ -13,7 +13,7 @@ namespace Utilities.ProgressTracking;
 /// As Unicode is not fully supported by Windows command prompt, progress bar smoothing is disabled
 /// on this platform - bar is built only with U+2588 character.
 /// </remarks>
-internal class ProgressBar
+internal sealed class ProgressBar
 {
     private const char BarBracket = '|';
     private const char EmptyBlock = ' ';
@@ -41,17 +41,26 @@ internal class ProgressBar
     /// Thrown, when specified number of progress bar blocks is negative or equal to zero.
     /// </exception>
     internal ProgressBar(Process trackedProcess, int blocks)
-    {        
-        if (trackedProcess is null) throw new ArgumentNullException("Provided process to track is a null reference:");
-        
+    {
+        if (trackedProcess is null)
+        {
+            string argumentName = nameof(trackedProcess);
+            const string ErrorMessage = "Provided process to track is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
+        }
+
         if (trackedProcess.CurrentStep != 0)
         {
-            throw new ArgumentException("Provided process not in its initial state:");
+            string argumentName = nameof(trackedProcess);
+            const string ErrorMessage = "Provided process not in its initial state:";
+            throw new ArgumentException(ErrorMessage, argumentName);
         }
 
         if (blocks <= 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid number of blocks: equal to {blocks}");
+            string argumentName = nameof(blocks);
+            string errorMessage = $"Invalid number of blocks: equal to {blocks}";
+            throw new ArgumentOutOfRangeException(argumentName, blocks, errorMessage);
         }
 
         _trackedProcess = trackedProcess;

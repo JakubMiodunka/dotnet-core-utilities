@@ -15,4 +15,4 @@ namespace Utilities.XmlValidation;
 /// <param name="Description">
 /// Detailed description of detected deviation.
 /// </param>
-public record XmlDeviation(int LineNumber, XmlSeverityType Severity, string Description);
+public sealed record XmlDeviation(int LineNumber, XmlSeverityType Severity, string Description);

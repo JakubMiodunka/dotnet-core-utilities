@@ -28,22 +28,30 @@ public static class FileSystemUtilities
     {
         if (path is null)
         {
-            throw new ArgumentNullException("Entry path is a null reference:");
+            string argumentName = nameof(path);
+            const string ErrorMessage = "Entry path is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (path == string.Empty)
         {
-            throw new ArgumentOutOfRangeException("Entry path is an empty string:");
+            string argumentName = nameof(path);
+            string errorMessage = $"Entry path is an empty string: {path}";
+            throw new ArgumentOutOfRangeException(argumentName, path, errorMessage);
         }
 
         if (!Directory.Exists(path))
         {
             if (File.Exists(path))
             {
-                throw new DirectoryNotFoundException($"Given file system entry is a file: {path}");
+                string errorMessage = $"Given file system entry is a file: {path}";
+                throw new DirectoryNotFoundException(errorMessage);
             }
-
-            throw new DirectoryNotFoundException($"Directory does not exist: {path}");
+            else
+            {
+                string errorMessage = $"Directory does not exist: {path}";
+                throw new DirectoryNotFoundException(errorMessage);
+            }
         }
     }
 
@@ -67,17 +75,22 @@ public static class FileSystemUtilities
     {
         if (path is null)
         {
-            throw new ArgumentNullException("Entry path is a null reference:");
+            string argumentName = nameof(path);
+            const string ErrorMessage = "Entry path is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (path == string.Empty)
         {
-            throw new ArgumentOutOfRangeException("Entry path is an empty string:");
+            string argumentName = nameof(path);
+            string errorMessage = $"Entry path is an empty string: {path}";
+            throw new ArgumentOutOfRangeException(argumentName, path, errorMessage);
         }
 
         if (Directory.Exists(path))
         {
-            throw new IOException($"Directory already exists: {path}");
+            string errorMessage = $"Directory already exists: {path}";
+            throw new IOException(errorMessage);
         }
     }
 
@@ -92,10 +105,13 @@ public static class FileSystemUtilities
     /// File extensions, that shall be considered as valid during the process.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    /// Thrown, when given path or at least one of given extensions is null reference.
+    /// Thrown, when given path is null reference.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// Thrown, when given path or at least one of given extension is an empty string.
+    /// Thrown, when given path is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown, when  at least one of given extensions is null reference or an empty string.
     /// </exception>
     /// <exception cref="IOException">
     /// Thrown, when validation fails.
@@ -104,29 +120,38 @@ public static class FileSystemUtilities
     {
         if (path is null)
         {
-            throw new ArgumentNullException("Entry path is a null reference:");
+            string argumentName = nameof(path);
+            const string ErrorMessage = "Entry path is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (path == string.Empty)
         {
-            throw new ArgumentOutOfRangeException("Entry path is an empty string:");
+            string argumentName = nameof(path);
+            string errorMessage = $"Entry path is an empty string: {path}";
+            throw new ArgumentOutOfRangeException(argumentName, path, errorMessage);
         }
 
         if (extensions is null)
         {
-            throw new ArgumentNullException("Extensions array is a null reference:");
+            string argumentName = nameof(extensions);
+            const string ErrorMessage = "Extensions array is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (extensions.Contains(null))
         {
-            throw new ArgumentNullException("One of given extensions is a null reference:");
+            string argumentName = nameof(extensions);
+            const string ErrorMessage = "One of given extensions is a null reference:";
+            throw new ArgumentException(ErrorMessage, argumentName);
         }
 
         if (extensions.Contains(string.Empty))
         {
-            throw new ArgumentOutOfRangeException("One of given extensions is an empty string:");
+            string argumentName = nameof(extensions);
+            const string ErrorMessage = "One of given extensions is an empty string:";
+            throw new ArgumentException(ErrorMessage, argumentName);
         }
-
 
         if (extensions.Any())
         {
@@ -134,7 +159,8 @@ public static class FileSystemUtilities
 
             if (!extensions.Contains(extension))
             {
-                throw new IOException($"Invalid extension: is '{extension}', but shall be one of '{string.Join(", ", extensions)}'");
+                string errorMessage = $"Invalid extension: is '{extension}', but shall be one of '{string.Join(", ", extensions)}'";
+                throw new IOException(errorMessage);
             }
         }
 
@@ -166,22 +192,30 @@ public static class FileSystemUtilities
     {
         if (path is null)
         {
-            throw new ArgumentNullException("Entry path is a null reference:");
+            string argumentName = nameof(path);
+            const string ErrorMessage = "Entry path is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (path == string.Empty)
         {
-            throw new ArgumentOutOfRangeException("Entry path is an empty string:");
+            string argumentName = nameof(path);
+            string errorMessage = $"Entry path is an empty string: {path}";
+            throw new ArgumentOutOfRangeException(argumentName, path, errorMessage);
         }
 
         if (!File.Exists(path))
         {
             if (Directory.Exists(path))
             {
-                throw new FileNotFoundException($"Given file system entry is a directory: {path}");
+                string errorMessage = $"Given file system entry is a directory: {path}";
+                throw new FileNotFoundException(errorMessage, path);
             }
-
-            throw new FileNotFoundException($"File does not exist: {path}");
+            else
+            {
+                string errorMessage = $"File does not exist: {path}";
+                throw new FileNotFoundException(errorMessage, path);
+            }
         }
 
         ValidateExtension(path, extensions);
@@ -210,17 +244,22 @@ public static class FileSystemUtilities
     {
         if (path is null)
         {
-            throw new ArgumentNullException("Entry path is a null reference:");
+            string argumentName = nameof(path);
+            const string ErrorMessage = "Entry path is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
         }
 
         if (path == string.Empty)
         {
-            throw new ArgumentOutOfRangeException("Entry path is an empty string:");
+            string argumentName = nameof(path);
+            string errorMessage = $"Entry path is an empty string: {path}";
+            throw new ArgumentOutOfRangeException(argumentName, path, errorMessage);
         }
 
         if (File.Exists(path))
         {
-            throw new IOException($"Given file already exists: {path}");
+            string errorMessage = $"Given file already exists: {path}";
+            throw new IOException(errorMessage);
         }
 
         ValidateExtension(path, extensions);
@@ -244,7 +283,7 @@ public static class FileSystemUtilities
         ValidateExistingFile(document, ".xml");
         ValidateExistingFile(schema, ".xsd");
 
-        var validation = new XmlDocumentValidation(document, schema);
+        var validation = new XmlFileValidation(document, schema);
 
         if (!validation.Execute())
         {

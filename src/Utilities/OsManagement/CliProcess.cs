@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: Cli
+
+using System.Diagnostics;
 
 
 namespace Utilities.OsManagement;
@@ -30,8 +32,9 @@ public sealed class CliProcess
         {
             if (value <= TimeSpan.Zero)
             {
+                string argumentName = nameof(value);
                 string errorMesage = $"Invalid timeout assignment: {value}";
-                throw new ArgumentOutOfRangeException(errorMesage);
+                throw new ArgumentOutOfRangeException(argumentName, value, errorMesage);
             }
 
             _timeout = value;
@@ -92,17 +95,23 @@ public sealed class CliProcess
 
         if (arguments is null)
         {
-            throw new ArgumentNullException("Arguments array is a null reference:");
+            string argumentName = nameof(arguments);
+            const string ErrorMesage = "Arguments array is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMesage);
         }
 
         if (arguments.Contains(null))
         {
-            throw new ArgumentNullException("One of given argument is a null reference:");
+            string argumentName = nameof(arguments);
+            const string ErrorMesage = "One of given argument is a null reference:";
+            throw new ArgumentException(ErrorMesage, argumentName);
         }
 
         if (arguments.Contains(string.Empty))
         {
-            throw new ArgumentOutOfRangeException("One of given argument is an empty string:");
+            string argumentName = nameof(arguments);
+            const string ErrorMesage = "One of given argument is an empty string:";
+            throw new ArgumentException(ErrorMesage, argumentName);
         }
 
         /* 

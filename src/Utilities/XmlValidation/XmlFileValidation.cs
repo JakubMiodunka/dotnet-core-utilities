@@ -26,7 +26,7 @@ namespace Utilities.XmlValidation;
 /// xmlValidation.SaveReportAs(Report);
 /// </code>
 /// </example>
-public sealed class XmlDocumentValidation
+public sealed class XmlFileValidation
 {
     public readonly string XmlDocument;
     public readonly string XmlSchema;
@@ -89,7 +89,7 @@ public sealed class XmlDocumentValidation
     /// <param name="xmlSchema">
     /// Path to *.xsd file, against which specified XML document shall be validated.
     /// </param>
-    public XmlDocumentValidation(string xmlDocument, string xmlSchema)
+    public XmlFileValidation(string xmlDocument, string xmlSchema)
     {
         FileSystemUtilities.ValidateExistingFile(xmlDocument, ".xml");
         FileSystemUtilities.ValidateExistingFile(xmlSchema, ".xsd");

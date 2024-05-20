@@ -3,7 +3,7 @@ namespace Utilities.ProgressTracking;
 /// <summary>
 /// Representation of tracked process state.
 /// </summary>
-internal class Process
+internal sealed class Process
 {
     internal readonly int TotalSteps;
     internal int CurrentStep { get; private set; }
@@ -23,7 +23,9 @@ internal class Process
     {
         if (totalSteps <= 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid number of process steps: equal to {totalSteps}");
+            string argumentName = nameof(totalSteps);
+            string errorMessage = $"Invalid number of process steps: equal to {totalSteps}";
+            throw new ArgumentOutOfRangeException(argumentName, totalSteps, errorMessage);
         }
         
         TotalSteps = totalSteps;
@@ -49,10 +51,16 @@ internal class Process
     {
         if (CurrentStep != 0)
         {
-            throw new InvalidOperationException("Subscription attempt, when process is not in its initial state:");
+            const string ErrorMessage = "Subscription attempt, when process is not in its initial state:";
+            throw new InvalidOperationException(ErrorMessage);
         }
 
-        if (subscriber is null) throw new ArgumentNullException("Specified subscriber is a null reference:");
+        if (subscriber is null)
+        {
+            string argumentName = nameof(subscriber);
+            const string ErrorMessage = "Specified subscriber is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
+        }
         
         _subscribers.Add(subscriber);
     }
@@ -70,7 +78,9 @@ internal class Process
     {
         if (steps < 0 )
         {
-            throw new ArgumentOutOfRangeException($"Invalid number of steps updating the process: equal to {steps}");
+            string argumentName = nameof(steps);
+            string erorMessage = $"Invalid number of steps updating the process: equal to {steps}";
+            throw new ArgumentOutOfRangeException(argumentName, steps, erorMessage);
         }
 
         if (steps != 0)

@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using System.Text;
 
 
@@ -13,7 +14,7 @@ namespace Utilities.ProgressTracking;
 /// Invalid state of those properties are indicated by System.DateTime.MinValue
 /// and System.TimeSpan.MinValue.
 /// </remarks>
-internal class ProgressStopwatch
+internal sealed class ProgressStopwatch
 {
     private const char OpeningBracket = '[';
     private const char ClosingBracket = ']';
@@ -43,11 +44,18 @@ internal class ProgressStopwatch
     /// </exception>
     internal ProgressStopwatch(Process trackedProcess)
     {
-        if (trackedProcess is null) throw new ArgumentNullException("Provided process to track is a null reference:");
+        if (trackedProcess is null)
+        {
+            string argumentName = nameof(trackedProcess);
+            const string ErrorMessage = "Provided process to track is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
+        }
 
         if (trackedProcess.CurrentStep != 0)
         {
-            throw new ArgumentException("Provided process not in its initial state:");
+            string argumentName = nameof(trackedProcess);
+            const string ErrorMessage = "Provided process not in its initial state:";
+            throw new ArgumentException(ErrorMessage, argumentName);
         }
         
         _trackedProcess = trackedProcess;

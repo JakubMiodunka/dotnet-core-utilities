@@ -66,7 +66,12 @@ public sealed class ProgressTracker : IDisposable
     /// </exception>
     private ProgressTracker(int totalSteps, string label, int progressBarBlocks, Mode mode)
     {
-        if (label is null) throw new ArgumentNullException("Provided label is a null reference.");
+        if (label is null)
+        {
+            string argumentName = nameof(label);
+            const string ErrorMessage = "Provided label is a null reference:";
+            throw new ArgumentNullException(argumentName, ErrorMessage);
+        }
         
         _mode = mode;
         _label = label;
@@ -93,7 +98,7 @@ public sealed class ProgressTracker : IDisposable
     /// </returns>
     public static ProgressTracker Simple(int totalSteps, int progressBarBlocks=30)
     {
-        return new ProgressTracker(totalSteps, "", progressBarBlocks, Mode.Simple);
+        return new ProgressTracker(totalSteps, string.Empty, progressBarBlocks, Mode.Simple);
     }
 
     /// <summary>
@@ -140,7 +145,7 @@ public sealed class ProgressTracker : IDisposable
 
     /// <summary>
     /// Generates string-based representation of current state of the tracker.
-    /// Format of generated depends on current tracker mode and starts with carriage return.
+    /// Format of generated depends on current tracker mode.
     /// </summary>
     /// <returns>String representation of the tracker.</returns>
     /// <exception cref="NotImplementedException">
@@ -153,7 +158,7 @@ public sealed class ProgressTracker : IDisposable
 
         if (_mode == Mode.Simple)
         {
-            return $"\r{simpleRepresentation}";
+            return $"{simpleRepresentation}";
         }
 
         string stepsRatio = $"{_trackedProcess.CurrentStep}/{_trackedProcess.TotalSteps}";
@@ -161,17 +166,41 @@ public sealed class ProgressTracker : IDisposable
 
         if (_mode == Mode.Regular)
         {
-            return $"\r{regularRepresentation}";
+            return $"{regularRepresentation}";
         }
 
         string advancedRepresentation = $"{regularRepresentation} {_stopwatch}";
 
         if (_mode == Mode.Advanced)
         {
-            return $"\r{advancedRepresentation}";
+            return $"{advancedRepresentation}";
         }
 
-        throw new NotImplementedException($"Selected mode not supported: equal to {_mode}");
+        string errorMessage = $"Selected mode not implemented: {_mode}";
+        throw new NotImplementedException(errorMessage);
+    }
+
+    /// <summary>
+    /// Updates displayed tracker representation.
+    /// </summary>
+    /// <param name="message">
+    /// Additional message, which shall be displayed above the tracker.
+    /// </param>
+    /// <param name="steps">
+    /// Number of steps, performed by the process since last update.
+    /// </param>
+    public void Update(string? message=null, int steps = 1)
+    {
+        _trackedProcess.Update(steps);
+
+        Console.Write("\r");
+
+        if (message is not null)
+        {
+            Console.WriteLine(message);
+        }
+
+        Console.Write(this);
     }
 
     /// <summary>
@@ -180,12 +209,11 @@ public sealed class ProgressTracker : IDisposable
     /// <param name="steps">
     /// Number of steps, performed by the process since last update.
     /// </param>
-    public void Update(int steps=1)
+    public void Update(int steps = 1)
     {
-        _trackedProcess.Update(steps);
-        Console.Write(this);
+        Update(null, steps);
     }
-    
+
     /// <summary>
     /// Prints a newline to leave the line, in which tracker representation was being displayed.
     /// </summary>
